@@ -5,18 +5,29 @@ import getStarWarsPlanets from '../services/StarWarsApi';
 
 function PlanetsProvider({ children }) {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // estado para renderizaçao condicional de table
+  const [filterName, setFilterName] = useState([]);
 
   useEffect(() => {
     getStarWarsPlanets().then((response) => {
       setData(response.results);
+      setFilterName(response.results);
       setLoading(false);
     });
   }, []);
 
+  function filterByName(value) {
+    const filtro = filterName
+      .filter((element) => element.name.toLowerCase().includes(value.toLowerCase()));
+    setFilterName(filtro);
+    if (value === '') setFilterName(data);
+  }
+
   const context = {
     data,
     loading,
+    filterName,
+    filterByName,
   };
 
   return (
