@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PlanetsContext from '../context/PlanetsContext';
 
 function Table() {
-  const { data } = useContext(PlanetsContext);
+  const { data, filterName } = useContext(PlanetsContext);
   const title = data
     .map((element) => Object.keys(element))[0] // retorna valor das chaves do obj
     .filter((nome) => nome !== 'residents'); // retorno sem a chave 'residents'
@@ -16,7 +16,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        {data.map((planet, index) => (
+        {filterName.map((planet, index) => (
           <tr key={ index }>
             <td>
               { planet.name }
