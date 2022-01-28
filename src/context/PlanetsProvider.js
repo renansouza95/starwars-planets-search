@@ -6,28 +6,42 @@ import getStarWarsPlanets from '../services/StarWarsApi';
 function PlanetsProvider({ children }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true); // estado para renderizaçao condicional de table
-  const [filterName, setFilterName] = useState([]);
+  const [filterData, setFilterData] = useState([]);
 
   useEffect(() => {
     getStarWarsPlanets().then((response) => {
       setData(response.results);
-      setFilterName(response.results);
+      setFilterData(response.results);
       setLoading(false);
     });
   }, []);
 
   function filterByName(value) {
-    const filtro = filterName
+    const filterName = filterData
       .filter((element) => element.name.toLowerCase().includes(value.toLowerCase()));
-    setFilterName(filtro);
-    if (value === '') setFilterName(data);
+    setFilterData(filterName);
+    if (value === '') setFilterData(data);
+  }
+
+  function filterByNumericValues(obj) {
+    const { column, comparison, value } = obj;
+    if (comparison === 'maior que') {
+      setFilterData(filterData.filter((planet) => planet[column] > Number(value)));
+    }
+    if (comparison === 'menor que') {
+      setFilterData(filterData.filter((planet) => planet[column] < Number(value)));
+    }
+    if (comparison === 'igual a') {
+      setFilterData(filterData.filter((planet) => planet[column] === value));
+    }
   }
 
   const context = {
     data,
     loading,
-    filterName,
+    filterData,
     filterByName,
+    filterByNumericValues,
   };
 
   return (
