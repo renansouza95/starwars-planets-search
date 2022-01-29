@@ -25,6 +25,7 @@ function PlanetsProvider({ children }) {
 
   function filterByNumericValues(obj) {
     const { column, comparison, value } = obj;
+    // console.log(obj);
     if (comparison === 'maior que') {
       setFilterData(filterData.filter((planet) => planet[column] > Number(value)));
     }

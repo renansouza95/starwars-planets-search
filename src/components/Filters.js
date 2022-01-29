@@ -3,6 +3,22 @@ import PlanetsContext from '../context/PlanetsContext';
 
 function Filters() {
   const { filterByName, filterByNumericValues } = useContext(PlanetsContext);
+
+  const [options, setOptions] = useState({
+    column: [
+      'population',
+      'orbital_period',
+      'diameter',
+      'rotation_period',
+      'surface_water',
+    ],
+    comparison: [
+      'maior que',
+      'menor que',
+      'igual a',
+    ],
+  });
+
   const [filters, setFilters] = useState({
     column: 'population',
     comparison: 'maior que',
@@ -19,9 +35,19 @@ function Filters() {
     setFilters({ ...filters, [name]: value });
   };
 
+  const selectedOption = (param) => {
+    const helper = options.column.filter((option) => option !== param);
+    setOptions({
+      ...options,
+      column: helper,
+    });
+    setFilters({ ...filters, column: helper[0] });
+  };
+
   const handleClick = (event) => {
     event.preventDefault();
     filterByNumericValues(filters);
+    selectedOption(filters.column);
   };
 
   // https://stackoverflow.com/questions/55757761/handle-an-input-with-react-hooks
@@ -40,6 +66,7 @@ function Filters() {
           onChange={ handleChange }
         />
       </div>
+      {/* //https://stackoverflow.com/questions/2155909/how-can-i-disable-an-option-in-a-select-based-on-its-value-in-javascript} */}
       <div id="numeric-filter">
         <select
           name="column"
@@ -48,11 +75,15 @@ function Filters() {
           data-testid="column-filter"
           onChange={ handleSelect }
         >
-          <option id="column" value="population">population</option>
-          <option id="column" value="orbital_period">orbital_period</option>
-          <option id="column" value="diameter">diameter</option>
-          <option id="column" value="rotation_period">rotation_period</option>
-          <option id="column" value="surface_water">surface_water</option>
+          { options.column.map((element, index) => (
+            <option
+              key={ index }
+              value={ element }
+              id="column"
+            >
+              { element }
+            </option>
+          ))}
         </select>
         <select
           name="comparison"
@@ -61,9 +92,15 @@ function Filters() {
           data-testid="comparison-filter"
           onChange={ handleSelect }
         >
-          <option id="comparison" value="maior que">maior que</option>
-          <option id="comparison" value="menor que">menor que</option>
-          <option id="comparison" value="igual a">igual a</option>
+          { options.comparison.map((element, index) => (
+            <option
+              key={ index }
+              value={ element }
+              id="comparison"
+            >
+              { element }
+            </option>
+          ))}
         </select>
         <input
           type="number"
