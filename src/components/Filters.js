@@ -35,6 +35,7 @@ function Filters() {
     setFilters({ ...filters, [name]: value });
   };
 
+  // TIve ajuda do Luiz Ricardo para implementar a logica do requisito 4
   const selectedOption = (param) => {
     const helper = options.column.filter((option) => option !== param);
     setOptions({
@@ -66,7 +67,6 @@ function Filters() {
           onChange={ handleChange }
         />
       </div>
-      {/* //https://stackoverflow.com/questions/2155909/how-can-i-disable-an-option-in-a-select-based-on-its-value-in-javascript} */}
       <div id="numeric-filter">
         <select
           name="column"
